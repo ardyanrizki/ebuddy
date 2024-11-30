@@ -88,7 +88,7 @@ struct FigmaDesignView: View {
             .padding(.vertical, 8)
             .padding(.horizontal, 4)
             .frame(width: 166, height: 312)
-            .background(Color.white)
+            .background(Color(.appBackground))
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }

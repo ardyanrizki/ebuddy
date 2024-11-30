@@ -34,7 +34,7 @@ struct UserDetailsView: View {
                         .clipShape(Circle())
                 } placeholder: {
                     Circle()
-                        .fill(.white)
+                        .fill(Color(.appBackground))
                         .frame(width: 96, height: 96)
                         .overlay(
                             ProgressView()
@@ -43,7 +43,7 @@ struct UserDetailsView: View {
                 
             } else if isUploading {
                 Circle()
-                    .fill(.white)
+                    .fill(Color(.appBackground))
                     .frame(width: 96, height: 96)
                     .overlay(
                         ProgressView()

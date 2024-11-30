@@ -63,7 +63,7 @@ struct UserRowView: View {
                         .clipShape(Circle())
                 } placeholder: {
                     Circle()
-                        .fill(.white)
+                        .fill(Color(.appBackground))
                         .frame(width: 48, height: 48)
                         .overlay(
                             ProgressView()
@@ -72,7 +72,7 @@ struct UserRowView: View {
                 
             } else if isUploading {
                 Circle()
-                    .fill(.white)
+                    .fill(Color(.appBackground))
                     .frame(width: 48, height: 48)
                     .overlay(
                         ProgressView()
