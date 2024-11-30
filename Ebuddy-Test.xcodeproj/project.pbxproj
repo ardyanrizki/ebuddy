@@ -15,6 +15,10 @@
 		3896BFC32CFB34A700DFEFC7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3896BFC22CFB34A700DFEFC7 /* FirebaseAuth */; };
 		3896BFC52CFB34A700DFEFC7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3896BFC42CFB34A700DFEFC7 /* FirebaseFirestore */; };
 		3896BFC72CFB34A700DFEFC7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 3896BFC62CFB34A700DFEFC7 /* FirebaseStorage */; };
+		3896BFCB2CFB3AD600DFEFC7 /* UserJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3896BFCA2CFB3AD600DFEFC7 /* UserJSON.swift */; };
+		3896BFD02CFB3D8A00DFEFC7 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3896BFCF2CFB3D8A00DFEFC7 /* UserService.swift */; };
+		3896BFD22CFB407C00DFEFC7 /* UsersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3896BFD12CFB407C00DFEFC7 /* UsersView.swift */; };
+		3896BFD42CFB408500DFEFC7 /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3896BFD32CFB408500DFEFC7 /* UsersViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		383EEE882CF73AA700037FAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		383EEE8B2CF73AA700037FAF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		383EEE922CF73B2C00037FAF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3896BFCA2CFB3AD600DFEFC7 /* UserJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserJSON.swift; sourceTree = "<group>"; };
+		3896BFCF2CFB3D8A00DFEFC7 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		3896BFD12CFB407C00DFEFC7 /* UsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersView.swift; sourceTree = "<group>"; };
+		3896BFD32CFB408500DFEFC7 /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +68,9 @@
 		383EEE832CF73AA500037FAF /* Ebuddy-Test */ = {
 			isa = PBXGroup;
 			children = (
-				383EEE842CF73AA500037FAF /* Ebuddy_TestApp.swift */,
-				383EEE862CF73AA500037FAF /* ContentView.swift */,
+				3896BFCD2CFB3ADF00DFEFC7 /* App */,
+				3896BFCC2CFB3ADA00DFEFC7 /* Service */,
+				3896BFCE2CFB3D4A00DFEFC7 /* Presentation */,
 				383EEE882CF73AA700037FAF /* Assets.xcassets */,
 				383EEE8A2CF73AA700037FAF /* Preview Content */,
 			);
@@ -74,6 +83,33 @@
 				383EEE8B2CF73AA700037FAF /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3896BFCC2CFB3ADA00DFEFC7 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				3896BFCA2CFB3AD600DFEFC7 /* UserJSON.swift */,
+				3896BFCF2CFB3D8A00DFEFC7 /* UserService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		3896BFCD2CFB3ADF00DFEFC7 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				383EEE842CF73AA500037FAF /* Ebuddy_TestApp.swift */,
+				383EEE862CF73AA500037FAF /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3896BFCE2CFB3D4A00DFEFC7 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				3896BFD12CFB407C00DFEFC7 /* UsersView.swift */,
+				3896BFD32CFB408500DFEFC7 /* UsersViewModel.swift */,
+			);
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,8 +191,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3896BFD22CFB407C00DFEFC7 /* UsersView.swift in Sources */,
+				3896BFD42CFB408500DFEFC7 /* UsersViewModel.swift in Sources */,
 				383EEE872CF73AA500037FAF /* ContentView.swift in Sources */,
+				3896BFD02CFB3D8A00DFEFC7 /* UserService.swift in Sources */,
 				383EEE852CF73AA500037FAF /* Ebuddy_TestApp.swift in Sources */,
+				3896BFCB2CFB3AD600DFEFC7 /* UserJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
