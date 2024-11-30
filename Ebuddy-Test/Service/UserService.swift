@@ -7,11 +7,13 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
 
 fileprivate let collectionName = "USERS"
 
 struct UserService {
-    private var db = Firestore.firestore()
+    private let db = Firestore.firestore()
+    private let storage = Storage.storage()
 
     func getUsers() async -> [UserJSON] {
         await withCheckedContinuation { continuation in
@@ -26,5 +28,23 @@ struct UserService {
                 }
             }
         }
+    }
+    
+    func uploadAvatar(image: UIImage, for uid: String) async throws {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+        let storageRef = storage.reference().child("profileImages/\(uid).jpg")
+        
+        let _ = try await storageRef.putDataAsync(imageData)
+        let url = try await storageRef.downloadURL()
+        
+        try await updateUserAvatarURL(url, for: uid)
+    }
+    
+    private func updateUserAvatarURL(_ url: URL, for uid: String) async throws {
+        let snapshot = try await db.collection("USERS").whereField("uid", isEqualTo: uid).getDocuments()
+        guard let document = snapshot.documents.first else {
+            return
+        }
+        try await document.reference.updateData(["avatar": url.absoluteString])
     }
 }

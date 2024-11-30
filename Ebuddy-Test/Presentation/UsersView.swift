@@ -16,7 +16,9 @@ struct UsersView: View {
                 Text("Loading...")
             } else {
                 List(viewModel.users) { user in
-                    UserRowView(user)
+                    UserRowView(user) { image in
+                        viewModel.uploadAvatar(image: image, for: user)
+                    }
                 }
                 .refreshable {
                     viewModel.fetchUsers()
@@ -29,22 +31,50 @@ struct UsersView: View {
 
 struct UserRowView: View {
     var user: UserJSON
+    let onUpload: (UIImage) -> Void
     
-    init(_ user: UserJSON) {
+    @State private var isShowingConfirmationDialog = false
+    @State private var currentUser: UIImage?
+    @State private var selectedImage: UIImage?
+    @State private var isShowingImagePicker = false
+    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    
+    init(_ user: UserJSON, onUpload: @escaping (UIImage) -> Void) {
         self.user = user
+        self.onUpload = onUpload
     }
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             // Circular avatar placeholder
-            Circle()
-                .fill((user.gender == .female ? Color.pink : Color.blue).opacity(0.3))
-                .frame(width: 48, height: 48)
-                .overlay(
-                    Text((user.email ?? "").prefix(1).uppercased())
-                        .font(.title)
-                        .foregroundColor(.white)
-                )
+            if let avatar = user.avatar, let avatarURL = URL(string: avatar) {
+                AsyncImage(url: avatarURL) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 48, height: 48)
+                        .clipShape(Circle())
+                } placeholder: {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 48, height: 48)
+                        .overlay(
+                            ProgressView()
+                        )
+                }
+            } else {
+                Circle()
+                    .fill((user.gender == .female ? Color.pink : Color.blue).opacity(0.3))
+                    .frame(width: 48, height: 48)
+                    .overlay(
+                        Text((user.email ?? "").prefix(1).uppercased())
+                            .font(.title)
+                            .foregroundColor(.white)
+                    )
+                    .onTapGesture {
+                        isShowingConfirmationDialog = true
+                    }
+            }
             
             // User details
             VStack(alignment: .leading, spacing: 8) {
@@ -71,6 +101,29 @@ struct UserRowView: View {
             }
 
             Spacer()
+        }
+        .confirmationDialog("Upload Profile Image", isPresented: $isShowingConfirmationDialog, titleVisibility: .visible) {
+            Button("Take Photo") {
+                sourceType = .camera
+                isShowingImagePicker = true
+            }
+            Button("Choose from Library") {
+                sourceType = .photoLibrary
+                isShowingImagePicker = true
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePicker(image: $selectedImage, isPresented: $isShowingImagePicker)
+        }
+        .onChange(of: isShowingImagePicker) { oldValue, newValue in
+            if oldValue, !newValue {
+                guard let selectedImage else {
+                    return
+                }
+                onUpload(selectedImage)
+                self.selectedImage = nil
+            }
         }
     }
 }
