@@ -16,9 +16,13 @@ struct UsersView: View {
                 Text("Loading...")
             } else {
                 List(viewModel.users) { user in
-                    UserRowView(user) { image in
-                        viewModel.uploadAvatar(image: image, for: user)
+                    NavigationLink {
+                        UserDetailsView(userId: user.uid ?? "")
+                    } label: {
+                        UserRowView(user)
+                            .environment(viewModel)
                     }
+
                 }
                 .refreshable {
                     viewModel.fetchUsers()
@@ -31,17 +35,18 @@ struct UsersView: View {
 
 struct UserRowView: View {
     var user: UserJSON
-    let onUpload: (UIImage) -> Void
+    
+    @Environment(UsersViewModel.self) private var viewModel
     
     @State private var isShowingConfirmationDialog = false
+    @State private var isUploading = false
     @State private var currentUser: UIImage?
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
-    init(_ user: UserJSON, onUpload: @escaping (UIImage) -> Void) {
+    init(_ user: UserJSON) {
         self.user = user
-        self.onUpload = onUpload
     }
 
     var body: some View {
@@ -62,6 +67,15 @@ struct UserRowView: View {
                             ProgressView()
                         )
                 }
+                
+            } else if isUploading {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 48, height: 48)
+                    .overlay(
+                        ProgressView()
+                    )
+                
             } else {
                 Circle()
                     .fill((user.gender == .female ? Color.pink : Color.blue).opacity(0.3))
@@ -117,12 +131,16 @@ struct UserRowView: View {
             ImagePicker(image: $selectedImage, isPresented: $isShowingImagePicker)
         }
         .onChange(of: isShowingImagePicker) { oldValue, newValue in
-            if oldValue, !newValue {
-                guard let selectedImage else {
-                    return
+            Task {
+                if oldValue, !newValue {
+                    guard let selectedImage else {
+                        return
+                    }
+                    for await isLoading in viewModel.uploadAvatar(image: selectedImage, for: user) {
+                        self.isUploading = isLoading
+                    }
+                    self.selectedImage = nil
                 }
-                onUpload(selectedImage)
-                self.selectedImage = nil
             }
         }
     }

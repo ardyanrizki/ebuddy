@@ -30,6 +30,19 @@ struct UserService {
         }
     }
     
+    func getUser(id: String) async -> UserJSON? {
+        await withCheckedContinuation { continuation in
+            db.collection("USERS").whereField("uid", isEqualTo: id).getDocuments { snapshot, error in
+                guard let document = snapshot?.documents.first else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let users = try? document.data(as: UserJSON.self)
+                continuation.resume(returning: users)
+            }
+        }
+    }
+    
     func uploadAvatar(image: UIImage, for uid: String) async throws {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
         let storageRef = storage.reference().child("profileImages/\(uid).jpg")

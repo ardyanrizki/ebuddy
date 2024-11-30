@@ -1,5 +1,5 @@
 //
-//  UsersViewModel.swift
+//  UserDetailsViewModel.swift
 //  Ebuddy-Test
 //
 //  Created by Muhammad Rizki Ardyan on 30/11/24.
@@ -7,25 +7,27 @@
 
 import SwiftUI
 
-@Observable final class UsersViewModel {
-    var users: [UserJSON] = []
+@Observable final class UserDetailsViewModel {
+    var user: UserJSON? = nil
     
     var isLoading = false
     
+    private let userId: String
     private let service = UserService()
     
-    init() {
-        fetchUsers()
+    init(userId: String) {
+        self.userId = userId
+        fetchUser()
     }
     
-    func fetchUsers() {
+    func fetchUser() {
         Task {
             isLoading = true
             defer {
                 isLoading = false
             }
             
-            users = await service.getUsers()
+            user = await service.getUser(id: userId)
         }
     }
     
@@ -41,7 +43,7 @@ import SwiftUI
                 
                 do {
                     try await service.uploadAvatar(image: image, for: userId)
-                    fetchUsers()
+                    fetchUser()
                 } catch {
                     print("Error", error)
                 }
