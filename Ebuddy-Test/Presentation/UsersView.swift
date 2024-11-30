@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UsersView: View {
-    @State var viewModel = UsersViewModel()
+    @State var viewModel = UserService.shared
     
     var body: some View {
         VStack {
@@ -17,7 +17,7 @@ struct UsersView: View {
             } else {
                 List(viewModel.users) { user in
                     NavigationLink {
-                        UserDetailsView(userId: user.uid ?? "")
+                        UserDetailsView(user: user)
                     } label: {
                         UserRowView(user)
                             .environment(viewModel)
@@ -29,18 +29,20 @@ struct UsersView: View {
                 }
             }
         }
+        .onAppear {
+            viewModel.fetchUsers()
+        }
         .navigationTitle("Users")
     }
 }
 
 struct UserRowView: View {
-    var user: UserJSON
+    private var user: UserJSON
     
-    @Environment(UsersViewModel.self) private var viewModel
+    @State var viewModel = UserService.shared
     
     @State private var isShowingConfirmationDialog = false
     @State private var isUploading = false
-    @State private var currentUser: UIImage?
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
